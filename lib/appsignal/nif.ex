@@ -393,6 +393,18 @@ defmodule Appsignal.Nif do
     false
   end
 
+  def appsignal_create_root_span(name) do
+    {:ok, make_ref()}
+  end
+
+  def appsignal_set_span_attribute_string(reference, key, value) do
+    :ok
+  end
+
+  def appsignal_close_span(pointer_to_span) do
+    :ok
+  end
+
   if Mix.env() in [:test, :test_phoenix, :test_no_nif] do
     def _data_to_json(resource) do
       resource
