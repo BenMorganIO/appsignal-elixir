@@ -161,7 +161,6 @@ defmodule Appsignal.TransactionRegistry do
   end
 
   def handle_call({:monitor, pid}, _from, state) do
-    :timer.sleep(6_000)
     monitor_reference = Process.monitor(pid)
     {:reply, monitor_reference, state}
   end
