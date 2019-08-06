@@ -43,9 +43,7 @@ defmodule Appsignal.TransactionRegistry do
       nil
     end
   catch
-    :exit, {:timeout, _} ->
-      ErrorHandler.handle_error(transaction, :exit, [], %{})
-      nil
+    :exit, {:timeout, _} = error -> handle_timeout(transaction, error)
   end
 
   @doc """
@@ -101,9 +99,7 @@ defmodule Appsignal.TransactionRegistry do
       {:error, :no_registry}
     end
   catch
-    :exit, {:timeout, _} ->
-      ErrorHandler.handle_error(transaction, :exit, [], %{})
-      nil
+    :exit, {:timeout, _} = error -> handle_timeout(transaction, error)
   end
 
   @doc """
@@ -129,6 +125,11 @@ defmodule Appsignal.TransactionRegistry do
       [{^pid, :ignore}] -> true
       _ -> false
     end
+  end
+
+  defp handle_timeout(transaction, error) do
+    ErrorHandler.handle_error(transaction, error, [], %{})
+    nil
   end
 
   defmodule State do
