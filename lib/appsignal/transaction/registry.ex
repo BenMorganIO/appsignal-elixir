@@ -144,6 +144,8 @@ defmodule Appsignal.TransactionRegistry do
   end
 
   def handle_call({:remove, transaction}, _from, state) do
+    :timer.sleep(6_000)
+
     reply =
       case pids_and_monitor_references(transaction) do
         [[_pid, _reference] | _] = pids_and_refs ->
