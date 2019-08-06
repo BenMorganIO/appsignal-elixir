@@ -128,7 +128,7 @@ defmodule Appsignal.TransactionRegistry do
   end
 
   defp handle_timeout(transaction, error) do
-    ErrorHandler.handle_error(transaction, error, [], %{})
+    ErrorHandler.handle_error(transaction, :appsignal_genserver_timeout, [], %{})
     nil
   end
 
