@@ -21,7 +21,7 @@ defmodule Appsignal.TransactionRegistry do
 
   @table :"$appsignal_transaction_registry"
 
-  alias Appsignal.Transaction
+  alias Appsignal.{ErrorHandler, Transaction}
 
   @spec start_link :: {:ok, pid}
   def start_link do
@@ -42,6 +42,10 @@ defmodule Appsignal.TransactionRegistry do
     else
       nil
     end
+  catch
+    :exit, {:timeout, _} ->
+      ErrorHandler.handle_error(transaction, :exit, [], %{})
+      nil
   end
 
   @doc """
@@ -96,6 +100,10 @@ defmodule Appsignal.TransactionRegistry do
     else
       {:error, :no_registry}
     end
+  catch
+    :exit, {:timeout, _} ->
+      ErrorHandler.handle_error(transaction, :exit, [], %{})
+      nil
   end
 
   @doc """
@@ -152,6 +160,7 @@ defmodule Appsignal.TransactionRegistry do
   end
 
   def handle_call({:monitor, pid}, _from, state) do
+    :timer.sleep(6_000)
     monitor_reference = Process.monitor(pid)
     {:reply, monitor_reference, state}
   end

@@ -64,10 +64,7 @@ defmodule Appsignal.ErrorHandler do
     @transaction.finish(transaction)
     @transaction.complete(transaction)
 
-    Logger.debug(fn ->
-      "Submitting #{inspect(transaction)}: #{message}"
-    end)
-
+    Logger.debug(fn -> "Submitting #{inspect(transaction)}: #{message}" end)
     transaction
   end
 
